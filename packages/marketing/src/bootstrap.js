@@ -4,6 +4,7 @@ import App from "./App";
 
 const mount = (el) => {
   ReactDOM.render(<App />, el);
+  // ReactDOM.render(<App />, el);
 };
 
 if (process.env.NODE_ENV === "development") {
