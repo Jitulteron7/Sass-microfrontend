@@ -11,13 +11,11 @@ export default () => {
       <StylesProvider>
         <BrowserRouter>
           <Switch>
-            <Route exact path={"/pricing"} component={Pricing} />
-            <Route exact path={"/"} component={Landing} />
+            <Route exact path="/pricing" component={Pricing} />
+            <Route path="/" component={Landing} />
           </Switch>
         </BrowserRouter>
       </StylesProvider>
     </div>
   );
 };
-
-
