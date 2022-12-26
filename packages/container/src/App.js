@@ -1,5 +1,4 @@
 import React from "react";
-import { mount } from "marketing/MarketingApp";
 import MarketingApp from "./compoents/MarketingApp";
 
 const App = () => {
