@@ -425,56 +425,58 @@ $topbarItemHoverColor: #c3e8fb;
 $topbarSearchInputBorderBottomColor: #ffffff;
 $topbarSearchInputColor: #ffffff;
 
-.card {
-  background-color: #ffffff;
-  padding: 1em;
-  margin-bottom: 16px;
-  border-radius: $borderRadius;
+.dashboard {
+  .card {
+    background-color: #ffffff;
+    padding: 1em;
+    margin-bottom: 16px;
+    border-radius: $borderRadius;
 
-  &.card-w-title {
-    padding-bottom: 2em;
+    &.card-w-title {
+      padding-bottom: 2em;
+    }
   }
-}
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 1.5rem 0 1rem 0;
-  font-family: inherit;
-  font-weight: normal;
-  line-height: 1.2;
-  color: inherit;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 1.5rem 0 1rem 0;
+    font-family: inherit;
+    font-weight: normal;
+    line-height: 1.2;
+    color: inherit;
 
-  &:first-child {
-    margin-top: 0;
+    &:first-child {
+      margin-top: 0;
+    }
   }
-}
 
-h1 {
-  font-size: 2.5rem;
-}
+  h1 {
+    font-size: 2.5rem;
+  }
 
-h2 {
-  font-size: 2rem;
-}
+  h2 {
+    font-size: 2rem;
+  }
 
-h3 {
-  font-size: 1.75rem;
-}
+  h3 {
+    font-size: 1.75rem;
+  }
 
-h4 {
-  font-size: 1.5rem;
-}
+  h4 {
+    font-size: 1.5rem;
+  }
 
-h5 {
-  font-size: 1.25rem;
-}
+  h5 {
+    font-size: 1.25rem;
+  }
 
-h6 {
-  font-size: 1rem;
+  h6 {
+    font-size: 1rem;
+  }
 }
 @mixin icon-override($icon) {
   &:before {
