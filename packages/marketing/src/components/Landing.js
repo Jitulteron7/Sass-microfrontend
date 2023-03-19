@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
+import { TextField, Autocomplete } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,7 +12,8 @@ import Container from "@material-ui/core/Container";
 import MaterialLink from "@material-ui/core/Link";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import { useState } from "react";
+import DialogAction from "./DialogAction";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -66,24 +68,55 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Album() {
   const classes = useStyles();
-  const [cards, setCards] = React.useState([]);
+  const [show, setShow] = React.useState([]);
+  const [pokemons, setPokemons] = useState([]);
   React.useEffect(() => {
     catchPokimon();
   }, []);
 
-  const catchPokimon =  async()=>{
+  const OnePokemon = async (pokemon) => {
     try {
-      await axios.get    
-    } catch (error) {
-      
-    }
+      const url = pokemon.url;
+      const res = await axios.get(url);
+
+      if (res.status == 200) {
+        return res.data;
+      }
+    } catch (error) {}
+  };
+  const catchPokimon = async () => {
+    try {
+      const res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=10");
+      if (res.status == 200) {
+        const results = await Promise.all(
+          res.data.results.map(async (d, i) => {
+            return await OnePokemon(d, i);
+          })
+        );
+        setPokemons(results);
+        console.log(results[2], "results");
+      }
+    } catch (error) {}
+  };
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  function getMoves(moves) {
+    let m = [];
+    for (let i = 0; i < 2; i++) {
+      m.push(capitalizeFirstLetter(moves[i].move.name));
+    }
+
+    return m;
+  }
 
   return (
     <React.Fragment>
       <main>
         {/* Hero unit */}
+        <DialogAction />
         <div className={classes.heroContent}>
           <Container>
             <Typography
@@ -133,29 +166,55 @@ export default function Album() {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {pokemons.map((pokemon, i) => (
+              <Grid item key={i} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {capitalizeFirstLetter(pokemon.name)}
                     </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe
-                      the content!
-                    </Typography>
+                    <h3>Abilities</h3>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "50% 50%",
+                      }}
+                    >
+                      {pokemon.abilities.map((a, i) => {
+                        return <div>{a.ability.name}</div>;
+                      })}
+                    </div>
+                    <h3>Moves</h3>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "50% 50%",
+                      }}
+                    >
+                      {getMoves(pokemon.moves).map((m, i) => {
+                        return <div>{m}</div>;
+                      })}
+                    </div>
+
+                    <div>Height : {pokemon.height}</div>
+
+                    <div>Weight : {pokemon.weight}</div>
+                    <div>Exp : {pokemon.base_experience}</div>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        ShowMore(true);
+                      }}
+                    >
                       View
-                    </Button>
-                    <Button size="small" color="primary">
-                      Edit
                     </Button>
                   </CardActions>
                 </Card>
