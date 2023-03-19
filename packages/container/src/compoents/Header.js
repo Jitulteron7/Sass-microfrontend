@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
+    backgroundColor: "#fff",
   },
   toolbar: {
     flexWrap: "wrap",
@@ -79,18 +80,30 @@ export default function Header({ isSignIn, onSignOut }) {
             component={RouterLink}
             to="/"
           >
-            App
+            PokiCatch
           </Typography>
-          <Button
-            color="primary"
-            variant="outlined"
-            className={classes.link}
-            component={RouterLink}
-            to={isSignIn ? "/" : "/auth/signin"}
-            onClick={onClick}
-          >
-            {isSignIn ? "Logout" : "Login"}
-          </Button>
+          <div>
+            <Button
+              color="primary"
+              variant="outlined"
+              className={classes.link}
+              component={RouterLink}
+              to={"/about"}
+              onClick={onClick}
+            >
+              About
+            </Button>
+            <Button
+              color="primary"
+              variant="outlined"
+              className={classes.link}
+              component={RouterLink}
+              to={isSignIn ? "/" : "/auth/signin"}
+              onClick={onClick}
+            >
+              {isSignIn ? "Logout" : "Login"}
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
     </React.Fragment>

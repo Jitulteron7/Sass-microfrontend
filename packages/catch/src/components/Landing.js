@@ -66,20 +66,52 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Album() {
   const classes = useStyles();
-  const [cards, setCards] = React.useState([]);
+  const [data, setData] = React.useState([]);
+  const [card1, setCard1] = React.useState();
+  const [card2, setCard2] = React.useState();
+  const [card3, setCard3] = React.useState();
+
   React.useEffect(() => {
     catchPokimon();
   }, []);
-
-  const catchPokimon =  async()=>{
+  var results = [];
+  const catchPokimon = async () => {
     try {
-      await axios.get    
-    } catch (error) {
-      
-    }
+      var numberOfRandoms = 3;
+      var maxRange = 100;
+
+      for (var i = 0; i < numberOfRandoms; i++) {
+        var random = Math.floor(Math.random() * maxRange + 1);
+        results.push(random);
+      }
+      setData(results);
+
+      const res1 = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${results[0]}`
+      );
+      if (res1.status === 200) {
+        const res2 = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon/${results[1]}`
+        );
+
+        if (res2.status == 200) {
+          const res3 = await axios.get(
+            `https://pokeapi.co/api/v2/pokemon/${results[2]}`
+          );
+          if (res3.status == 200) {
+            setCard1(res1.data);
+            setCard2(res2.data);
+            setCard3(res3.data);
+            console.log(res1.data);
+          }
+        }
+      }
+    } catch (error) {}
+  };
+
+  const catchIt = ()=>{
+    
   }
-
-
   return (
     <React.Fragment>
       <main>
@@ -95,7 +127,7 @@ export default function Album() {
             >
               Catch Pokimon with Ash Ketchum
             </Typography>
-            <Typography
+            {/* <Typography
               variant="h5"
               align="center"
               color="textSecondary"
@@ -104,46 +136,22 @@ export default function Album() {
               Something short and leading about the collection below—its
               contents, the creator, etc. Make it short and sweet, but not too
               short so folks don&apos;t simply skip over it entirely.
-            </Typography>
-            <img
-              src={
-                "https://variety.com/wp-content/uploads/2022/12/Screen-Shot-2022-12-16-at-9.31.44-AM-e1671201592808.png?w=681&h=383&crop=1&resize=681%2C383"
-              }
-            />
-            {/* <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <Link to="/pricing">
-                    <Button variant="contained" color="primary">
-                      Pricing
-                    </Button>
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link to="/pricing">
-                    <Button variant="outlined" color="primary">
-                      Pricing
-                    </Button>
-                  </Link>
-                </Grid>
-              </Grid>
-            </div> */}
+            </Typography> */}
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {card1 ? (
+              <Grid item key={card1} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${data[0]}.svg`}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {card1.name.charAt(0).toUpperCase() + card1.name.slice(1)}
                     </Typography>
                     <Typography>
                       This is a media card. You can use this section to describe
@@ -160,7 +168,74 @@ export default function Album() {
                   </CardActions>
                 </Card>
               </Grid>
-            ))}
+            ) : (
+              <></>
+            )}
+
+            {card2 ? (
+              <Grid item key={card1} xs={12} sm={6} md={4}>
+                <Card className={classes.card}>
+                  <CardMedia
+                    className={classes.cardMedia}
+                    image={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${data[1]}.svg`}
+                    title="Image title"
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {card2.name.charAt(0).toUpperCase() + card2.name.slice(1)}
+                    </Typography>
+                    <Typography>
+                      This is a media card. You can use this section to describe
+                      the content!
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      onClick={() => {
+                        catchIt();
+                      }}
+                      size="small"
+                      color="primary"
+                    >
+                      Catch
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ) : (
+              <></>
+            )}
+
+            {card3 ? (
+              <Grid item key={card1} xs={12} sm={6} md={4}>
+                <Card className={classes.card}>
+                  <CardMedia
+                    className={classes.cardMedia}
+                    image={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${data[2]}.svg`}
+                    title="Image title"
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {card3.name.charAt(0).toUpperCase() + card3.name.slice(1)}
+                    </Typography>
+                    <Typography>
+                      This is a media card. You can use this section to describe
+                      the content!
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small" color="primary">
+                      View
+                    </Button>
+                    <Button size="small" color="primary">
+                      Edit
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ) : (
+              <></>
+            )}
           </Grid>
         </Container>
       </main>

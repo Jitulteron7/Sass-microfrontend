@@ -3,6 +3,7 @@ import Header from "./compoents/Header";
 const MarketingAppLazyLoad = lazy(() => import("./compoents/MarketingApp"));
 const AuthAppLazyLoad = lazy(() => import("./compoents/AuthApp"));
 const DashboardApp = lazy(() => import("./compoents/DashboardApp"));
+const AboutApp = lazy(() => import("./compoents/AboutApp"));
 import { createBrowserHistory } from "history";
 import { Router, Redirect, Route, Switch } from "react-router-dom";
 import {
@@ -38,7 +39,10 @@ const App = () => {
                 {!isSignIn && <Redirect to={"/"} />}
                 <DashboardApp />
               </Route>
-              <Route path={"/"} component={MarketingAppLazyLoad} />
+              <Route path={"/about"}>
+                <AboutApp />
+              </Route>
+              <Route exact path={"/"} component={MarketingAppLazyLoad} />
             </Switch>
           </Suspense>
         </div>
