@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import DialogAction from "./DialogAction";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -68,7 +69,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Album() {
   const classes = useStyles();
-  const [show, setShow] = React.useState([]);
+  const [show, setShow] = React.useState(false);
+  const [pokeInfo, setPokeInfo] = useState(null);
   const [pokemons, setPokemons] = useState([]);
   React.useEffect(() => {
     catchPokimon();
@@ -86,7 +88,9 @@ export default function Album() {
   };
   const catchPokimon = async () => {
     try {
-      const res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=10");
+      const res = await axios.get(
+        "https://pokeapi.co/api/v2/pokemon?limit=100"
+      );
       if (res.status == 200) {
         const results = await Promise.all(
           res.data.results.map(async (d, i) => {
@@ -100,7 +104,7 @@ export default function Album() {
   };
 
   function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return string?.charAt(0).toUpperCase() + string?.slice(1);
   }
 
   function getMoves(moves) {
@@ -112,133 +116,135 @@ export default function Album() {
     return m;
   }
 
+  
+
   return (
-    <React.Fragment>
-      <main>
-        {/* Hero unit */}
-        <DialogAction />
-        <div className={classes.heroContent}>
-          <Container>
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="textPrimary"
-              gutterBottom
-            >
-              Catch Pokimon with Ash Ketchum
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="textSecondary"
-              paragraph
-            >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
-            </Typography>
-            <img
-              src={
-                "https://variety.com/wp-content/uploads/2022/12/Screen-Shot-2022-12-16-at-9.31.44-AM-e1671201592808.png?w=681&h=383&crop=1&resize=681%2C383"
-              }
-            />
-            {/* <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <Link to="/pricing">
-                    <Button variant="contained" color="primary">
-                      Pricing
-                    </Button>
-                  </Link>
+    <>
+      <React.Fragment>
+        <main>
+          {/* Hero unit */}
+          <DialogAction
+            show={show}
+            setShow={setShow}
+            pokeInfo={pokeInfo}
+            capitalizeFirstLetter={capitalizeFirstLetter}
+            setPokeInfo={setPokeInfo}
+          />
+          <div className={classes.heroContent}>
+            <Container>
+              <Typography
+                component="h1"
+                variant="h2"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+              >
+                Catch Pokimon with Ash Ketchum
+              </Typography>
+              <Typography
+                variant="h5"
+                align="center"
+                color="textSecondary"
+                paragraph
+              >
+                Something short and leading about the collection below—its
+                contents, the creator, etc. Make it short and sweet, but not too
+                short so folks don&apos;t simply skip over it entirely.
+              </Typography>
+              <img
+                style={{ width: "100%" }}
+                src={
+                  "https://variety.com/wp-content/uploads/2022/12/Screen-Shot-2022-12-16-at-9.31.44-AM-e1671201592808.png?w=681&h=383&crop=1&resize=681%2C383"
+                }
+              />
+            </Container>
+          </div>
+          <Container className={classes.cardGrid} maxWidth="md">
+            {/* End hero unit */}
+            <Grid container spacing={4}>
+              {pokemons.map((pokemon, i) => (
+                <Grid item key={i} xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+                      title="Image title"
+                    />
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {capitalizeFirstLetter(pokemon.name)}
+                      </Typography>
+                      <h3 style={{ margin: "5px 0" }}>Abilities</h3>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "50% 50%",
+                        }}
+                      >
+                        {pokemon.abilities.map((a, i) => {
+                          return <div>{a.ability.name}</div>;
+                        })}
+                      </div>
+                      <h3 style={{ margin: "5px 0" }}>Moves</h3>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "50% 50%",
+                        }}
+                      >
+                        {getMoves(pokemon.moves).map((m, i) => {
+                          return <div>{m}</div>;
+                        })}
+                      </div>
+
+                      <div style={{ margin: "5px 0 " }}>
+                        <span style={{ fontWeight: "600" }}>Height </span>:{" "}
+                        {pokemon.height}
+                      </div>
+                      <div style={{ margin: "5px 0 " }}>
+                        <span style={{ fontWeight: "600" }}>Weight </span>:{" "}
+                        {pokemon.weight}
+                      </div>
+                      <div style={{ margin: "5px 0 " }}>
+                        <span style={{ fontWeight: "600" }}>Exp </span>:{" "}
+                        {pokemon.base_experience}
+                      </div>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() => {
+                          setPokeInfo(pokemon);
+                          setShow(true);
+                        }}
+                      >
+                        View
+                      </Button>
+                    </CardActions>
+                  </Card>
                 </Grid>
-                <Grid item>
-                  <Link to="/pricing">
-                    <Button variant="outlined" color="primary">
-                      Pricing
-                    </Button>
-                  </Link>
-                </Grid>
-              </Grid>
-            </div> */}
+              ))}
+            </Grid>
           </Container>
-        </div>
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {pokemons.map((pokemon, i) => (
-              <Grid item key={i} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
-                    title="Image title"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {capitalizeFirstLetter(pokemon.name)}
-                    </Typography>
-                    <h3>Abilities</h3>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "50% 50%",
-                      }}
-                    >
-                      {pokemon.abilities.map((a, i) => {
-                        return <div>{a.ability.name}</div>;
-                      })}
-                    </div>
-                    <h3>Moves</h3>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "50% 50%",
-                      }}
-                    >
-                      {getMoves(pokemon.moves).map((m, i) => {
-                        return <div>{m}</div>;
-                      })}
-                    </div>
-
-                    <div>Height : {pokemon.height}</div>
-
-                    <div>Weight : {pokemon.weight}</div>
-                    <div>Exp : {pokemon.base_experience}</div>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() => {
-                        ShowMore(true);
-                      }}
-                    >
-                      View
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="textSecondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
-    </React.Fragment>
+        </main>
+        {/* Footer */}
+        <footer className={classes.footer}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Footer
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="center"
+            color="textSecondary"
+            component="p"
+          >
+            Something here to give the footer a purpose!
+          </Typography>
+          <Copyright />
+        </footer>
+        {/* End footer */}
+      </React.Fragment>
+    </>
   );
 }

@@ -250,6 +250,7 @@
       </div>
     </div>
   </div>
+  <button @click="Show">CLick</button>
 </template>
 
 <script>
@@ -338,6 +339,11 @@ export default {
         style: "currency",
         currency: "USD",
       });
+    },
+
+    Show() {
+      const catches = JSON.parse(localStorage.getItem("catches"));
+      console.log(catches, "catches");
     },
   },
 };
