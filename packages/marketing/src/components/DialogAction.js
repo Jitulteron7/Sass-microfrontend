@@ -11,7 +11,7 @@ import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import Lottie from "lottie-react";
 import PokeBall from "./pokeball.json";
-
+import { v4 as uuidv4 } from "uuid";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -115,7 +115,7 @@ export default function DialogAction({
                 let catches = JSON.parse(localStorage.getItem("catches"))
                   ? JSON.parse(localStorage.getItem("catches"))
                   : [];
-                catches.push(pokeInfo);
+                catches.push({ no: uuidv4(), ...pokeInfo });
                 localStorage.setItem("catches", JSON.stringify(catches));
               }, 5000);
             }}
