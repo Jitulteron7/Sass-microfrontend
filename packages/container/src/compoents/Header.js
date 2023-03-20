@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   link: {
-    margin: theme.spacing(1, 1.5),
+    margin: "10px",
   },
   heroContent: {
     padding: theme.spacing(8, 0, 6),
@@ -80,12 +80,12 @@ export default function Header({ isSignIn, onSignOut }) {
             component={RouterLink}
             to="/"
           >
-            PokiCatch
+            PokeCatch
           </Typography>
           <div>
             <Button
-              color="primary"
               variant="outlined"
+              style={{ margin: "0 10px" }}
               className={classes.link}
               component={RouterLink}
               to={"/about"}
@@ -93,8 +93,22 @@ export default function Header({ isSignIn, onSignOut }) {
             >
               About
             </Button>
+            {isSignIn ? (
+              <Button
+                style={{ margin: "0 10px" }}
+                variant="outlined"
+                className={classes.link}
+                component={RouterLink}
+                to={"/dashboard"}
+                onClick={onClick}
+              >
+                DashBoard
+              </Button>
+            ) : (
+              <></>
+            )}
             <Button
-              color="primary"
+              style={{ margin: "0 10px" }}
               variant="outlined"
               className={classes.link}
               component={RouterLink}

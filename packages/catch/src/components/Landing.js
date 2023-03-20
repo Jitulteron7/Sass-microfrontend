@@ -109,9 +109,7 @@ export default function Album() {
     } catch (error) {}
   };
 
-  const catchIt = ()=>{
-    
-  }
+  const catchIt = () => {};
   return (
     <React.Fragment>
       <main>
@@ -125,7 +123,7 @@ export default function Album() {
               color="textPrimary"
               gutterBottom
             >
-              Catch Pokimon with Ash Ketchum
+              Catch Pokemon with Ash Ketchum
             </Typography>
             {/* <Typography
               variant="h5"

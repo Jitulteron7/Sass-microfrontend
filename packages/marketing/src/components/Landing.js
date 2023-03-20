@@ -116,8 +116,6 @@ export default function Album() {
     return m;
   }
 
-  
-
   return (
     <>
       <React.Fragment>
@@ -139,7 +137,7 @@ export default function Album() {
                 color="textPrimary"
                 gutterBottom
               >
-                Catch Pokimon with Ash Ketchum
+                Catch Pokemon with Ash Ketchum
               </Typography>
               <Typography
                 variant="h5"
