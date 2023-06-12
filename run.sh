@@ -8,6 +8,6 @@ for app in ${apps[@]}; do
     npm run start &
     cd ../../
 done 
-what ius 
+
 wait 
  
