@@ -1,5 +1,5 @@
 #! /bin/bash
-
+# all packages
 apps=("about" "auth" "catch" "container" "dashboard" "marketing")
 
 for app in ${apps[@]}; do 
